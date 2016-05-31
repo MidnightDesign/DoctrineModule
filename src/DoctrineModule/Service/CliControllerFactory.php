@@ -20,10 +20,8 @@
 namespace DoctrineModule\Service;
 
 use DoctrineModule\Controller\CliController;
-use Symfony\Component\Console\Application;
-use Zend\ServiceManager\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
-use Zend\ServiceManager\ServiceManager;
+use Interop\Container\ContainerInterface;
+use Zend\ServiceManager\Factory\FactoryInterface;
 
 /**
  * Factory responsible of instantiating an {@see \DoctrineModule\Controller\CliController}
@@ -39,11 +37,10 @@ class CliControllerFactory implements FactoryInterface
      *
      * @return \DoctrineModule\Controller\CliController
      */
-    public function createService(ServiceLocatorInterface $serviceLocator)
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
-        /* @var $serviceLocator \Zend\ServiceManager\AbstractPluginManager */
         /* @var $application \Symfony\Component\Console\Application */
-        $application = $serviceLocator->getServiceLocator()->get('doctrine.cli');
+        $application = $container->get('doctrine.cli');
 
         return new CliController($application);
     }

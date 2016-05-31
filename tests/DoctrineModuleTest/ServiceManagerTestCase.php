@@ -20,7 +20,6 @@
 namespace DoctrineModuleTest;
 
 use Zend\ServiceManager\ServiceManager;
-use Zend\Mvc\Service\ServiceManagerConfig;
 
 /**
  * Base test case to be used when a service manager instance is required
@@ -60,9 +59,7 @@ class ServiceManagerTestCase
     {
         $configuration  = $configuration ?: static::getConfiguration();
         $serviceManager = new ServiceManager(
-            new ServiceManagerConfig(
-                isset($configuration['service_manager']) ? $configuration['service_manager'] : array()
-            )
+            isset($configuration['service_manager']) ? $configuration['service_manager'] : array()
         );
 
         $serviceManager->setService('ApplicationConfig', $configuration);

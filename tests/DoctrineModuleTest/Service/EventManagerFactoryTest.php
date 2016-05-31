@@ -19,6 +19,7 @@
 
 namespace DoctrineModuleTest\Service;
 
+use Doctrine\Common\EventManager;
 use PHPUnit_Framework_TestCase as BaseTestCase;
 use DoctrineModule\Service\EventManagerFactory;
 use Zend\ServiceManager\ServiceManager;
@@ -50,7 +51,7 @@ class EventManagerFactoryTest extends BaseTestCase
         );
 
         /* $var $eventManager \Doctrine\Common\EventManager */
-        $eventManager = $factory->createService($serviceManager);
+        $eventManager = $factory($serviceManager, EventManager::class);
         $this->assertInstanceOf('Doctrine\Common\EventManager', $eventManager);
 
         $listeners = $eventManager->getListeners('dummy');
@@ -79,7 +80,7 @@ class EventManagerFactoryTest extends BaseTestCase
         );
 
         /* $var $eventManager \Doctrine\Common\EventManager */
-        $eventManager = $factory->createService($serviceManager);
+        $eventManager = $factory($serviceManager, EventManager::class);
         $this->assertInstanceOf('Doctrine\Common\EventManager', $eventManager);
 
         $listeners = $eventManager->getListeners();
@@ -111,7 +112,7 @@ class EventManagerFactoryTest extends BaseTestCase
         );
 
         /* $var $eventManager \Doctrine\Common\EventManager */
-        $eventManager = $factory->createService($serviceManager);
+        $eventManager = $factory($serviceManager, EventManager::class);
         $this->assertInstanceOf('Doctrine\Common\EventManager', $eventManager);
 
         $listeners = $eventManager->getListeners();
@@ -141,6 +142,6 @@ class EventManagerFactoryTest extends BaseTestCase
         );
 
         $this->setExpectedException('InvalidArgumentException');
-        $factory->createService($serviceManager);
+        $factory($serviceManager, EventManager::class);
     }
 }

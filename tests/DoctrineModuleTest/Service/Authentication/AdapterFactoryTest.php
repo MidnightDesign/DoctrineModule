@@ -48,7 +48,7 @@ class AdapterFactoryTest extends BaseTestCase
             )
         );
 
-        $adapter = $factory->createService($serviceManager);
+        $adapter = $factory($serviceManager, $name);
         $this->assertInstanceOf('DoctrineModule\Authentication\Adapter\ObjectRepository', $adapter);
     }
 }

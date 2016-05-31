@@ -19,8 +19,8 @@
 namespace DoctrineModule\Service\Authentication;
 
 use DoctrineModule\Service\AbstractFactory;
+use Interop\Container\ContainerInterface;
 use Zend\Authentication\AuthenticationService;
-use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
  * Factory to create authentication service object.
@@ -33,15 +33,15 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 class AuthenticationServiceFactory extends AbstractFactory
 {
     /**
+     * {@inheritdoc}
      *
-     * @param \Zend\ServiceManager\ServiceLocatorInterface $serviceLocator
-     * @return \Zend\Authentication\AuthenticationService
+     * @return AuthenticationService
      */
-    public function createService(ServiceLocatorInterface $serviceLocator)
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         return new AuthenticationService(
-            $serviceLocator->get('doctrine.authenticationstorage.' . $this->getName()),
-            $serviceLocator->get('doctrine.authenticationadapter.' . $this->getName())
+            $container->get('doctrine.authenticationstorage.' . $this->getName()),
+            $container->get('doctrine.authenticationadapter.' . $this->getName())
         );
     }
 

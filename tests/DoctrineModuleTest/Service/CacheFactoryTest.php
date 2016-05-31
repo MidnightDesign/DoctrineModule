@@ -19,6 +19,8 @@
 
 namespace DoctrineModuleTest\Service;
 
+use Doctrine\Common\Cache\ArrayCache;
+use Doctrine\Common\Cache\PredisCache;
 use DoctrineModule\Service\CacheFactory;
 use PHPUnit_Framework_TestCase as BaseTestCase;
 use Zend\ServiceManager\ServiceManager;
@@ -51,7 +53,7 @@ class CacheFactoryTest extends BaseTestCase
         );
 
         /* @var $service \Doctrine\Common\Cache\ArrayCache */
-        $service = $factory->createService($serviceManager);
+        $service = $factory($serviceManager, ArrayCache::class);
 
         $this->assertInstanceOf('Doctrine\\Common\\Cache\\ArrayCache', $service);
         $this->assertSame('bar', $service->getNamespace());
@@ -89,7 +91,7 @@ class CacheFactoryTest extends BaseTestCase
         );
         $serviceManager->addAbstractFactory('Zend\Cache\Service\StorageCacheAbstractServiceFactory');
 
-        $cache = $factory->createService($serviceManager);
+        $cache = $factory($serviceManager, 'foo');
 
         $this->assertInstanceOf('DoctrineModule\Cache\ZendStorageCache', $cache);
     }
@@ -111,11 +113,12 @@ class CacheFactoryTest extends BaseTestCase
                     ],
                 ],
             ]
-        )->setService(
+        );
+        $serviceManager->setService(
             'my_predis_alias',
             $this->getMock('Predis\ClientInterface')
         );
-        $cache = $factory->createService($serviceManager);
+        $cache = $factory($serviceManager, PredisCache::class);
 
         $this->assertInstanceOf('Doctrine\Common\Cache\PredisCache', $cache);
     }

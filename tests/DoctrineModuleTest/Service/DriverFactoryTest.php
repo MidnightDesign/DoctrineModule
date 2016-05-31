@@ -19,7 +19,9 @@
 
 namespace DoctrineModuleTest\Service;
 
+use Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain;
 use DoctrineModule\Service\DriverFactory;
+use DoctrineModuleTest\Service\Mock\MetadataDriverMock;
 use PHPUnit_Framework_TestCase as BaseTestCase;
 use Zend\ServiceManager\ServiceManager;
 
@@ -44,8 +46,8 @@ class DriverFactoryTest extends BaseTestCase
             )
         );
 
-        $factory = new DriverFactory('testDriver');
-        $driver  = $factory->createService($serviceManager);
+        $factory = new DriverFactory('testDriver', Mock\MetadataDriverMock::class);
+        $driver  = $factory($serviceManager, MetadataDriverMock::class);
         $this->assertInstanceOf('DoctrineModuleTest\Service\Mock\MetadataDriverMock', $driver);
     }
 
@@ -73,7 +75,7 @@ class DriverFactoryTest extends BaseTestCase
         );
 
         $factory = new DriverFactory('testChainDriver');
-        $driver  = $factory->createService($serviceManager);
+        $driver  = $factory($serviceManager, MappingDriverChain::class);
         $this->assertInstanceOf('Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain', $driver);
         $drivers = $driver->getDrivers();
         $this->assertCount(1, $drivers);
